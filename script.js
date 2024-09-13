@@ -34,6 +34,21 @@ function surprise() {
     
     const nextNextFriday13th = getNextFriday13th(new Date());
     document.getElementById('next-next-friday').textContent = `Date: ${nextNextFriday13th.toDateString()}`;
+
+    // Hide the main countdown
+    document.getElementById('countdown').style.display = 'none';
+
+    // Show a message in place of the main countdown
+    const mainContainer = document.getElementById('main-container');
+    let message = document.getElementById('friday-13th-message');
+    if (!message) {
+        message = document.createElement('p');
+        message.id = 'friday-13th-message';
+        message.style.fontSize = '2rem';
+        message.style.marginTop = '2rem';
+        mainContainer.appendChild(message);
+    }
+    message.textContent = "It's here! Check the side box for the next one!";
 }
 
 function updateDates() {
@@ -54,8 +69,6 @@ function update() {
     const nextCountdown = document.getElementById('next-countdown');
     const nextFriday13th = getNextFriday13th();
     
-    updateCountdown(nextFriday13th, mainCountdown);
-    
     if (today.getDay() === 5 && today.getDate() === 13) {
         // It's Friday the 13th
         surprise();
@@ -66,6 +79,14 @@ function update() {
         document.body.classList.remove('spooky-active');
         document.querySelector('h1').textContent = "Spooky Friday the 13th Countdown";
         document.getElementById('next-friday-container').style.display = 'none';
+        mainCountdown.style.display = 'flex';
+        updateCountdown(nextFriday13th, mainCountdown);
+
+        // Remove the message if it exists
+        const message = document.getElementById('friday-13th-message');
+        if (message) {
+            message.remove();
+        }
     }
 }
 

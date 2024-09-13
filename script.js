@@ -25,7 +25,6 @@ function updateCountdown(targetDate, countdownElement) {
 }
 
 function surprise() {
-    document.body.style.backgroundColor = '#ff0000';
     document.body.classList.add('spooky-active');
     document.querySelector('h1').textContent = "It's Friday the 13th! Beware!";
     
@@ -49,6 +48,9 @@ function surprise() {
         mainContainer.appendChild(message);
     }
     message.textContent = "It's here! Check the side box for the next one!";
+
+    // Apply the appropriate background color
+    applyBackgroundColor();
 }
 
 function updateDates() {
@@ -75,7 +77,6 @@ function update() {
         updateCountdown(getNextFriday13th(today), nextCountdown);
     } else {
         // It's not Friday the 13th
-        document.body.style.backgroundColor = '#1a1a1a';
         document.body.classList.remove('spooky-active');
         document.querySelector('h1').textContent = "Spooky Friday the 13th Countdown";
         document.getElementById('next-friday-container').style.display = 'none';
@@ -87,8 +88,83 @@ function update() {
         if (message) {
             message.remove();
         }
+
+        // Reset background color based on dark mode
+        applyBackgroundColor();
     }
 }
+
+function applyBackgroundColor() {
+    const today = new Date();
+    const isFriday13th = today.getDay() === 5 && today.getDate() === 13;
+
+    if (isFriday13th) {
+        if (document.body.classList.contains('dark-mode')) {
+            document.body.style.backgroundColor = '#800000'; // Darker red for Friday 13th dark mode
+        } else {
+            document.body.style.backgroundColor = '#FF0000'; // Bright red for Friday 13th
+        }
+    } else {
+        if (document.body.classList.contains('dark-mode')) {
+            document.body.style.backgroundColor = '#4B0000'; // Darker shade of red for normal dark mode
+        } else {
+            document.body.style.backgroundColor = '#8B0000'; // Dark red for normal mode
+        }
+    }
+}
+
+function toggleDarkMode() {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    document.body.classList.toggle('dark-mode');
+    
+    if (document.body.classList.contains('dark-mode')) {
+        localStorage.setItem('darkMode', 'enabled');
+        darkModeToggle.textContent = 'Turn Dark Mode Off';
+    } else {
+        localStorage.setItem('darkMode', 'disabled');
+        darkModeToggle.textContent = 'Turn Dark Mode On';
+    }
+    applyBackgroundColor();
+}
+
+function shareCountdown() {
+    const nextFriday13th = getNextFriday13th();
+    const shareText = `Check out the countdown to the next Friday the 13th (${nextFriday13th.toDateString()}) at ${window.location.href}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'Friday the 13th Countdown',
+            text: shareText,
+            url: window.location.href,
+        })
+        .catch((error) => console.log('Error sharing', error));
+    } else {
+        // Fallback for browsers that don't support the Web Share API
+        prompt('Copy this link to share:', shareText);
+    }
+}
+
+function loadDarkModePreference() {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    if (localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        darkModeToggle.textContent = 'Turn Dark Mode Off';
+    } else {
+        darkModeToggle.textContent = 'Turn Dark Mode On';
+    }
+    applyBackgroundColor();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    const shareButton = document.getElementById('share-button');
+
+    darkModeToggle.addEventListener('click', toggleDarkMode);
+    shareButton.addEventListener('click', shareCountdown);
+
+    // Load user's dark mode preference
+    loadDarkModePreference();
+});
 
 updateDates();
 setInterval(update, 1000);

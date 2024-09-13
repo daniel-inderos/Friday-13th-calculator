@@ -1,0 +1,113 @@
+body {
+    font-family: 'Creepster', cursive;
+    background-color: #1a1a1a;
+    color: #ff6600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    background-image: url('https://www.transparenttextures.com/patterns/black-thread-light.png');
+}
+
+.container {
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(255, 102, 0, 0.7);
+    margin: 20px;
+    position: relative;
+    overflow: hidden;
+    /* Remove any transform property if it exists */
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 102, 0, 0.1) 10px,
+        rgba(255, 102, 0, 0.1) 20px
+    );
+    z-index: -1;
+    /* Remove animation property */
+}
+
+h1, h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+p {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+#countdown, #next-countdown {
+    font-size: 2rem;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#countdown span, #next-countdown span {
+    display: inline-block;
+    min-width: 80px;
+    padding: 10px;
+    margin: 5px;
+    background-color: rgba(255, 102, 0, 0.2);
+    border-radius: 5px;
+}
+
+#main-container {
+    max-width: 600px;
+}
+
+#next-friday-container {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 300px;
+    transform: none; /* Remove the rotation */
+}
+
+@keyframes spooky {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
+.spooky-active {
+    animation: spooky 0.5s infinite;
+}
+
+@media (max-width: 768px) {
+    body {
+        flex-direction: column;
+    }
+
+    #next-friday-container {
+        position: static;
+        transform: none;
+        margin-top: 20px;
+    }
+
+    h1, h2 {
+        font-size: 2rem;
+    }
+
+    #countdown, #next-countdown {
+        font-size: 1.5rem;
+    }
+}
